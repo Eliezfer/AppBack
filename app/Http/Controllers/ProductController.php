@@ -15,6 +15,8 @@ class ProductController extends Controller
     public function index()
     {
         //
+        $products = Product::all();
+        return response()->json($products,200);
     }
 
     /**
@@ -46,9 +48,11 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($product)
     {
         //
+        $productFound = Product::find($product);
+        return response()->json($productFound,200);
     }
 
     /**
@@ -69,9 +73,15 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $product)
     {
         //
+        $updateProduct = Product::find($product);
+        $data = $request->input();
+        $updateProduct -> fill($data);
+        $updateProduct -> save();
+        return response()->json($updateProduct,200);
+
     }
 
     /**
@@ -80,8 +90,11 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($product)
     {
         //
+        $productFound = Product::find($product);
+        $productFound->delete();
+        return response()->json($productFound, 204);
     }
 }
