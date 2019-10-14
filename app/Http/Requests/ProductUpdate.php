@@ -46,7 +46,7 @@ class ProductUpdate extends FormRequest
     public function attributes()
     {
         return [
-            'price' => 'Precio del articulo'
+            'price' => 'precio del articulo'
         ];
     }
 
