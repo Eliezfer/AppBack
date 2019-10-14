@@ -78,7 +78,9 @@ class ProductTest extends TestCase
         $response = $this->json('DELETE', '/api/products/'.$product->id);
         $response->assertStatus(204);
     }
-    
+    /**
+     * CREATE-1
+     */
     public function test_client_can_create_a_product()
     {
         // Given

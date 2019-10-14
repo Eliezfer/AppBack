@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use Response;
+use App\Http\Requests\ProductUpdate;
+use App\Http\Requests\ProductPost; 
 
 class ProductController extends Controller
 {
@@ -14,9 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
-        $products = Product::all();
-        return response()->json($products,200);
+        return Response::json(Product::all(),200);
     }
 
     /**
@@ -35,11 +36,10 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductPost $request)
     {
-       
         $product = Product::create($request->all());  
-        return response()->json($product,201);
+        return Response::json($product,201);
     }
 
     /**
@@ -48,11 +48,10 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show($product)
+    public function show(Product $product)
     {
         //
-        $productFound = Product::find($product);
-        return response()->json($productFound,200);
+        return $product;
     }
 
     /**
@@ -73,15 +72,12 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $product)
+    public function update(ProductUpdate $request, Product $product)
     {
         //
-        $updateProduct = Product::find($product);
-        $data = $request->input();
-        $updateProduct -> fill($data);
-        $updateProduct -> save();
-        return response()->json($updateProduct,200);
-
+        $attribute = $request->all();
+        $product->update($attribute);
+        return $product;
     }
 
     /**
@@ -90,11 +86,10 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy($product)
+    public function destroy(Product $product)
     {
         //
-        $productFound = Product::find($product);
-        $productFound->delete();
-        return response()->json($productFound, 204);
+        $product->delete();
+        return Response::json([], 204);
     }
 }

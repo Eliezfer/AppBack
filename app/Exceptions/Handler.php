@@ -3,6 +3,9 @@
 namespace App\Exceptions;
 
 use Exception;
+use Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -46,6 +49,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof ModelNotFoundException) {
+            $json = [
+                'code' => 'ERROR-2',
+                'title' =>'Not Found',
+                'message' => 'No hay un producto con ese ID'
+            ];
+            return Response::json(['errors' =>$json], JsonResponse::HTTP_NOT_FOUND);
+        }
         return parent::render($request, $exception);
     }
 }

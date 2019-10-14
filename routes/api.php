@@ -25,8 +25,8 @@ Route::post('products', "ProductController@store");
 
 Route::get('products', "ProductController@index");
 
-Route::get('products/{id}', "ProductController@show");
+Route::get('products/{product}', "ProductController@show");
 
-Route::put('products/{id}', "ProductController@update");
+Route::put('products/{product}', "ProductController@update");
 
-Route::delete('products/{id}', "ProductController@destroy");
+Route::delete('products/{product}', "ProductController@destroy");
