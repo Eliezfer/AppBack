@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Product;
 use Illuminate\Http\Request;
 use Response;
-use App\Http\Requests\ProductUpdate;
-use App\Http\Requests\ProductPost; 
+use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Requests\ProductCreateRequest; 
 
 class ProductController extends Controller
 {
@@ -36,7 +36,7 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductPost $request)
+    public function store(ProductCreateRequest $request)
     {
         $product = Product::create($request->all());  
         return Response::json($product,201);
@@ -72,7 +72,7 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductUpdate $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
         //
         $attribute = $request->all();
