@@ -29,8 +29,8 @@ class ProductCreateRequest extends FormRequest
     {
         return [
             //
-            'name' => 'required',
-            'price'=>'required|numeric|gt:0'
+            'data.attributes.name' => 'required',
+            'data.attributes.price'=>'required|numeric|gt:0'
         ];
     }
     
@@ -38,18 +38,18 @@ class ProductCreateRequest extends FormRequest
     public function messages()
     {
         return[
-            'name.required' => 'El :attribute no es enviado en la solicitud',
-            'price.required' => 'El :attribute no es enviado en la solicitud',
-            'price.numeric' => 'El :attribute no es un número',
-            'price.gt' => 'El :attribute es menor o igual a 0'
+            'data.attributes.name.required' => 'El :attribute no es enviado en la solicitud',
+            'data.attributes.price.required' => 'El :attribute no es enviado en la solicitud',
+            'data.attributes.price.numeric' => 'El :attribute no es un número',
+            'data.attributes.price.gt' => 'El :attribute es menor o igual a 0'
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'nombre del articulo',
-            'price' => 'precio del articulo'
+            'data.attributes.name' => 'nombre del articulo',
+            'data.attributes.price' => 'precio del articulo'
         ];
     }
 

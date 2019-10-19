@@ -30,7 +30,7 @@ class ProductUpdateRequest extends FormRequest
     {
         return [
             //
-            'price'=>'numeric|gt:0'
+            'data.attributes.price'=>'numeric|gt:0'
         ];
     }
     
@@ -38,15 +38,15 @@ class ProductUpdateRequest extends FormRequest
     public function messages()
     {
         return[
-            'price.numeric' => 'El :attribute debe ser un número',
-            'price.gt' => 'El :attribute es menor o igual a 0'
+            'data.attributes.price.numeric' => 'El :attribute debe ser un número',
+            'data.attributes.price.gt' => 'El :attribute es menor o igual a 0'
         ];
     }
 
     public function attributes()
     {
         return [
-            'price' => 'precio del articulo'
+            'data.attributes.price' => 'precio del articulo'
         ];
     }
 

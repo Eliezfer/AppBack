@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Response;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Requests\ProductCreateRequest; 
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductResourceCollection;
 
 class ProductController extends Controller
 {
@@ -17,7 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Response::json(Product::all(),200);
+        return new ProductResourceCollection(Product::all(),200);
     }
 
     /**
@@ -38,8 +40,8 @@ class ProductController extends Controller
      */
     public function store(ProductCreateRequest $request)
     {
-        $product = Product::create($request->all());  
-        return Response::json($product,201);
+        $product = Product::create($request->input('data.attributes'));  
+        return new ProductResource($product,201);
     }
 
     /**
@@ -51,7 +53,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         //
-        return $product;
+        return new ProductResource($product);
     }
 
     /**
@@ -75,9 +77,9 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, Product $product)
     {
         //
-        $attribute = $request->all();
+        $attribute = $request->input('data.attributes');
         $product->update($attribute);
-        return $product;
+        return new ProductResource($product);
     }
 
     /**

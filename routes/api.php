@@ -30,3 +30,5 @@ Route::get('products/{product}', "ProductController@show");
 Route::put('products/{product}', "ProductController@update");
 
 Route::delete('products/{product}', "ProductController@destroy");
+
+Route::resource('products', 'ProductController');
