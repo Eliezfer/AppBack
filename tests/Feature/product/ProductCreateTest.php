@@ -18,8 +18,13 @@ class ProductCreateTest extends TestCase
     {
         // Given
         $productData = [
-            'name' => 'Super Product',
-            'price' => '23.30'
+            "data" => [
+                "type" => "products",
+                "attributes" => [
+                    "name" => "Super Product",
+                    "price" => "23.30"
+                ]
+            ]
         ];
 
         // When
@@ -31,25 +36,44 @@ class ProductCreateTest extends TestCase
         
         // Assert the response has the correct structure
         $response->assertJsonStructure([
-            'id',
-            'name',
-            'price'
+            "data" => [
+                "type",
+                "id",
+                "attributes" => [
+                  "name",
+                  "price"
+                ],
+                "link" => [
+                  "self"
+                ]
+            ]
         ]);
 
         // Assert the product was created
         // with the correct data
+        $body = $response->decodeResponseJson();
+
         $response->assertJsonFragment([
-            'name' => 'Super Product',
-            'price' => '23.30'
+            "data" => [
+                "type" => "products",
+                "id" => $body['data']['id'],
+                "attributes" => [
+                  "name" => 'Super Product' ,
+                  "price" =>'23.30'
+                ],
+                "link" => [
+                  "self" => $body['data']['link']['self']
+                ]
+            ]
         ]);
         
-        $body = $response->decodeResponseJson();
+        
 
         // Assert product is on the database
         $this->assertDatabaseHas(
             'products',
             [
-                'id' => $body['id'],
+                'id' => $body['data']['id'],
                 'name' => 'Super Product',
                 'price' => '23.30'
             ]
@@ -62,7 +86,12 @@ class ProductCreateTest extends TestCase
     {
         //Given
         $productData = [
-            'price' => '23.30'
+            "data" => [
+                "type" => "products",
+                "attributes" => [
+                    "price" => "23.30"
+                ]
+            ]
         ];
         // When
         $response = $this->json('POST', '/api/products', $productData); 
@@ -76,7 +105,7 @@ class ProductCreateTest extends TestCase
                 'code',
                 'title',
                 'message'=>[
-                    'name'
+                    'data.attributes.name'
                 ]
             ]
         ]);
@@ -87,7 +116,7 @@ class ProductCreateTest extends TestCase
                 'code' => 'ERROR-1',
                 'title' => 'Unprocessable Entity',
                 'message' =>[
-                    'name' => [
+                    'data.attributes.name' => [
                         "El nombre del articulo no es enviado en la solicitud"
                     ]
                 ]
@@ -102,7 +131,12 @@ class ProductCreateTest extends TestCase
     {
         //Given
         $productData = [
-            'name' => 'calcetas'
+            "data" => [
+                "type" => "products",
+                "attributes" => [
+                    "name" => "Super Product",
+                ]
+            ]
         ];
         // When
         $response = $this->json('POST', '/api/products', $productData); 
@@ -116,7 +150,7 @@ class ProductCreateTest extends TestCase
                 'code',
                 'title',
                 'message'=>[
-                    'price'
+                    'data.attributes.price'
                 ]
             ]
         ]);
@@ -127,7 +161,7 @@ class ProductCreateTest extends TestCase
                 'code' => 'ERROR-1',
                 'title' => 'Unprocessable Entity',
                 'message' =>[
-                    'price' => [
+                    'data.attributes.price' => [
                         "El precio del articulo no es enviado en la solicitud"
                     ]
                 ]
@@ -142,8 +176,13 @@ class ProductCreateTest extends TestCase
     {
         //Given
         $productData = [
-            'name' => 'Calcetas',
-            'price' => 'Calcetas'
+            "data" => [
+                "type" => "products",
+                "attributes" => [
+                    "name" => "Calcetas",
+                    "price" => "Calcetas"
+                ]
+            ]
         ];
         // When
         $response = $this->json('POST', '/api/products', $productData); 
@@ -157,7 +196,7 @@ class ProductCreateTest extends TestCase
                 'code',
                 'title',
                 'message'=>[
-                    'price'
+                    'data.attributes.price'
                 ]
             ]
         ]);
@@ -168,7 +207,7 @@ class ProductCreateTest extends TestCase
                 'code' => 'ERROR-1',
                 'title' => 'Unprocessable Entity',
                 'message' =>[
-                    'price' => [
+                    'data.attributes.price' => [
                         "El precio del articulo no es un número",
                         "El precio del articulo es menor o igual a 0"
                     ]
@@ -184,8 +223,13 @@ class ProductCreateTest extends TestCase
     {
         //Given
         $productData = [
-            'name' => 'Calcetas',
-            'price' => '-20'
+            "data" => [
+                "type" => "products",
+                "attributes" => [
+                    "name" => "Super Product",
+                    "price" => "-20"
+                ]
+            ]
         ];
         // When
         $response = $this->json('POST', '/api/products', $productData); 
@@ -199,7 +243,7 @@ class ProductCreateTest extends TestCase
                 'code',
                 'title',
                 'message'=>[
-                    'price'
+                    'data.attributes.price'
                 ]
             ]
         ]);
@@ -210,7 +254,7 @@ class ProductCreateTest extends TestCase
                 'code' => 'ERROR-1',
                 'title' => 'Unprocessable Entity',
                 'message' =>[
-                    'price' => [
+                    'data.attributes.price' => [
                         "El precio del articulo es menor o igual a 0"
                     ]
                 ]

@@ -18,24 +18,37 @@ class ProductUpdateTest extends TestCase
         $product = factory(Product::class)->create();
         
         $updateProduct = [
-            'name' => 'Super Product',
-            'price' => '23.30'
+                "data" => [
+                    "type" => "products",
+                    "attributes" => [
+                        "name" => "Super Product",
+                        "price" => "23.30"
+                    ]
+                ]
         ];
 
         $response = $this->json('PUT', '/api/products/'.$product->id, $updateProduct);
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'id',
-            'name',
-            'price'
+            "data" => [
+                "type",
+                "id",
+                "attributes" => [
+                  "name",
+                  "price"
+                ],
+                "link" => [
+                  "self"
+                ]
+            ]
         ]);
         $body = $response->decodeResponseJson();
         $this->assertDatabaseHas(
             'products',
             [
-                'id' => $body['id'],
-                'name' => $body['name'],
-                'price' => $body['price']
+                'id' => $body['data']['id'],
+                'name' => $body['data']['attributes']['name'],
+                'price' =>  $body['data']['attributes']['price']
             ]
         );
     }
@@ -48,9 +61,15 @@ class ProductUpdateTest extends TestCase
         $product = factory(Product::class)->create();
         
         $updateProduct = [
-            'name' => 'Super Product',
-            'price' => 'Super Product'
+            "data" => [
+                "type" => "products",
+                "attributes" => [
+                    'name' => 'Super Product',
+                    'price' => 'Super Product'
+                ]
+            ]
         ];
+
         //when
         $response = $this->json('PUT', '/api/products/'.$product->id, $updateProduct);
          // Then
@@ -62,7 +81,7 @@ class ProductUpdateTest extends TestCase
                 'code',
                 'title',
                 'message'=>[
-                    'price'
+                    'data.attributes.price'
                 ]
             ]
         ]);
@@ -73,7 +92,7 @@ class ProductUpdateTest extends TestCase
                 'code' => 'ERROR-1',
                 'title' => 'Unprocessable Entity',
                 'message' =>[
-                    'price' => [
+                    'data.attributes.price' => [
                         "El precio del articulo debe ser un número",
                         "El precio del articulo es menor o igual a 0"
                     ]
@@ -90,8 +109,13 @@ class ProductUpdateTest extends TestCase
         $product = factory(Product::class)->create();
         
         $updateProduct = [
-            'name' => 'Super Product',
-            'price' => '-20'
+            "data" => [
+                "type" => "products",
+                "attributes" => [
+                    'name' => 'Super Product',
+                    'price' => '-20'
+                ]
+            ]
         ];
         //when
         $response = $this->json('PUT', '/api/products/'.$product->id, $updateProduct);
@@ -104,7 +128,7 @@ class ProductUpdateTest extends TestCase
                 'code',
                 'title',
                 'message'=>[
-                    'price'
+                    'data.attributes.price'
                 ]
             ]
         ]);
@@ -115,7 +139,7 @@ class ProductUpdateTest extends TestCase
                 'code' => 'ERROR-1',
                 'title' => 'Unprocessable Entity',
                 'message' =>[
-                    'price' => [
+                    'data.attributes.price' => [
                         "El precio del articulo es menor o igual a 0"
                     ]
                 ]
@@ -131,9 +155,15 @@ class ProductUpdateTest extends TestCase
         $product = factory(Product::class)->create();
         
         $updateProduct = [
-            'name' => 'Super Product',
-            'price' => '20'
+            "data" => [
+                "type" => "products",
+                "attributes" => [
+                    'name' => 'Super Product',
+                    'price' => '20'
+                ]
+            ]
         ];
+
         //when
         $response = $this->json('PUT', '/api/products/200', $updateProduct);
          // Then

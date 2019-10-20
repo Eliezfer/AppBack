@@ -21,11 +21,18 @@ class ProductListTest extends TestCase
         });;
         $response = $this->json('GET', '/api/products/');
         $response->assertStatus(200);
-        $response->assertJson($products->toArray());
         $response->assertJsonStructure([
-            '*' => ['id',
-            'name',
-            'price']
+            "data" => [
+                '*' => ["type",
+                "id",
+                "attributes" => [
+                  "name",
+                  "price"
+                ],
+                "link" => [
+                  "self"
+                ]]
+            ]
         ]);
 
     }

@@ -21,17 +21,25 @@ class ProductShowTest extends TestCase
         $response = $this->json('GET', '/api/products/'.$product->id);
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'id',
-            'name',
-            'price'
+            "data" => [
+                "type",
+                "id",
+                "attributes" => [
+                  "name",
+                  "price"
+                ],
+                "link" => [
+                  "self"
+                ]
+            ]
         ]);
         $body = $response->decodeResponseJson();
         $this->assertDatabaseHas(
             'products',
             [
-                'id' => $body['id'],
-                'name' => $body['name'],
-                'price' => $body['price']
+                'id' => $body['data']['id'],
+                'name' => $body['data']['attributes']['name'],
+                'price' =>  $body['data']['attributes']['price']
             ]
         );
     }
