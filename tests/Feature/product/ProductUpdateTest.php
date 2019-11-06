@@ -27,9 +27,18 @@ class ProductUpdateTest extends TestCase
         $response->assertJsonStructure([
             'id',
             'name',
-            'price'
+            'price' 
         ]);
         $body = $response->decodeResponseJson();
+
+        $response->assertJsonFragment(
+            [
+                'id' => $body['id'],
+                'name' => $body['name'],
+                'price' => $body['price']
+            ]
+        );
+
         $this->assertDatabaseHas(
             'products',
             [

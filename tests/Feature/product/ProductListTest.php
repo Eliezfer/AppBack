@@ -34,13 +34,10 @@ class ProductListTest extends TestCase
      */
     public function test_client_empty_list_products()
     {
-        $products = factory(Product::class,0)->create()->map(function ($product) {
-            return $product->only(['id', 'name', 'price']);
-        });;
         $response = $this->json('GET', '/api/products/');
         $response->assertStatus(200);
-        $response->assertJson($products->toArray());
-        $response->assertJsonStructure(null);
+        $response->assertJsonCount(0);
+        $response->assertJsonStructure(['*'=>[]]);
 
     }
 }

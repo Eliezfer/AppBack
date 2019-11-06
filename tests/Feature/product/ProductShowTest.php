@@ -26,8 +26,7 @@ class ProductShowTest extends TestCase
             'price'
         ]);
         $body = $response->decodeResponseJson();
-        $this->assertDatabaseHas(
-            'products',
+        $response->assertJsonFragment(
             [
                 'id' => $body['id'],
                 'name' => $body['name'],
